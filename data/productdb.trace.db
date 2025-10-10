@@ -1,0 +1,6 @@
+2025-10-10 14:10:45.067063+07:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]SEPRODUCTS LECT * FROM"; expected "SAVEPOINT, SCRIPT, SHUTDOWN"; SQL statement:
+SEPRODUCTS LECT * FROM [42001-224]
+2025-10-10 14:10:45.682060+07:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]SEPRODUCTS LECT * FROM"; expected "SAVEPOINT, SCRIPT, SHUTDOWN"; SQL statement:
+SEPRODUCTS LECT * FROM [42001-224]

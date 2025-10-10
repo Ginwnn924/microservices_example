@@ -2,6 +2,7 @@ package org.example.product_service.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.product_service.entity.Product;
+import org.example.product_service.response.ProductResponse;
 import org.example.product_service.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,5 +21,10 @@ public class ProductController {
     @PostMapping
     public Product save(@RequestBody final Product product) {
         return productService.createProduct(product);
+    }
+
+    @GetMapping("/{id}")
+    public ProductResponse getProductById(@PathVariable final int id) {
+        return productService.getProductById(id);
     }
 }
