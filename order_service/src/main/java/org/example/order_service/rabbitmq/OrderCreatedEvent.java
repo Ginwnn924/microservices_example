@@ -11,9 +11,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class OrderCreatedEvent implements Serializable {
     private int orderId;
     private long totalPrice;
-
-
 }
