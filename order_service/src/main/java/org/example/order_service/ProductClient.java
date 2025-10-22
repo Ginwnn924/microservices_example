@@ -1,6 +1,6 @@
 package org.example.order_service;
 
-import org.example.order_service.response.ProductResponse;
+import org.example.order_service.response.OrderItemResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProductClient {
 
     @GetMapping("/products/{id}")
-    ProductResponse getProductById(@PathVariable int id);
+    OrderItemResponse getProductById(@PathVariable int id);
 }

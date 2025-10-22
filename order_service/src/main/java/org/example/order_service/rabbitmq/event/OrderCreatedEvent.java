@@ -1,9 +1,7 @@
-package org.example.order_service.rabbitmq;
+package org.example.order_service.rabbitmq.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.example.order_service.entity.OrderItemEntity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,8 +9,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class OrderCreatedEvent implements Serializable {
     private int orderId;
     private long totalPrice;
+    private List<OrderItemEvent> listItems;
 }

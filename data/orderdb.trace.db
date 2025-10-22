@@ -1,0 +1,6 @@
+2025-10-22 21:02:25.080097+07:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]SORDER_ITEMS ELECT * FROM ORDERS ORDER_ITEMS"; expected "SAVEPOINT, SCRIPT, SHUTDOWN"; SQL statement:
+SORDER_ITEMS ELECT * FROM ORDERS ORDER_ITEMS [42001-224]
+2025-10-22 22:46:01.850198+07:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE FROM [*]ORDER"; expected "identifier"; SQL statement:
+DELETE FROM ORDER [42001-224]

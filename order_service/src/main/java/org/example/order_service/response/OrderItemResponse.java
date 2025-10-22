@@ -1,9 +1,12 @@
 package org.example.order_service.response;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class ProductResponse {
+@Setter
+@Getter
+public class OrderItemResponse {
     private int id;
     private String name;
     private long price;

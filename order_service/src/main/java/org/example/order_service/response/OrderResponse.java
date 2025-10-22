@@ -1,16 +1,19 @@
 package org.example.order_service.response;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.example.order_service.entity.OrderItemEntity;
 import org.example.order_service.entity.OrderStatus;
 
-@Data
+import java.util.List;
+
+@Getter
+@Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderResponse {
     private int id;
-    private String totalPrice;
+    private long totalPrice;
     private OrderStatus status;
-    private ProductResponse product;
+    private List<OrderItemEntity> listItems;
 }

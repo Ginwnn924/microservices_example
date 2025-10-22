@@ -1,6 +1,7 @@
 package org.example.order_service.rabbitmq;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.order_service.rabbitmq.event.InventoryFailedEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class Consumer {
     @RabbitListener(queues = "order.failed.queue")
-    public void handleOrderFailed(InventoryFailed event) {
+    public void handleOrderFailed(InventoryFailedEvent event) {
         log.info("Received order failed event: {}", event);
     }
 }

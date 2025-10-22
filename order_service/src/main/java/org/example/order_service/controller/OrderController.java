@@ -2,9 +2,9 @@ package org.example.order_service.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.order_service.ProductClient;
-import org.example.order_service.entity.Order;
+import org.example.order_service.entity.OrderEntity;
+import org.example.order_service.request.OrderRequest;
 import org.example.order_service.response.OrderResponse;
-import org.example.order_service.response.ProductResponse;
 import org.example.order_service.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +16,8 @@ public class OrderController {
     private final ProductClient productClient;
 
     @PostMapping
-    public Order createOrder(@RequestBody final Order order) {
-        return orderService.createOrder(order);
+    public OrderResponse createOrder(@RequestBody final OrderRequest request) {
+        return orderService.createOrder(request);
     }
 
     @GetMapping("/{id}")

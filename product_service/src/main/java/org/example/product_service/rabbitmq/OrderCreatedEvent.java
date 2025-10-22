@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -12,4 +13,5 @@ import java.io.Serializable;
 public class OrderCreatedEvent implements Serializable {
     private int orderId;
     private long totalPrice;
+    private List<OrderItem> listItems;
 }
