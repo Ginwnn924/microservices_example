@@ -1,6 +1,8 @@
 package org.example.order_service.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.order_service.PaymentClient;
 import org.example.order_service.ProductClient;
 import org.example.order_service.entity.OrderEntity;
 import org.example.order_service.entity.OrderItemEntity;
@@ -10,7 +12,9 @@ import org.example.order_service.rabbitmq.event.OrderCreatedEvent;
 import org.example.order_service.rabbitmq.event.OrderItemEvent;
 import org.example.order_service.repository.OrderRepository;
 import org.example.order_service.request.OrderRequest;
+import org.example.order_service.request.PaymenRequest;
 import org.example.order_service.response.OrderResponse;
+import org.example.order_service.response.PaymentResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,26 +24,23 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
+    private final PaymentClient paymentClient;
     private final OrderProducer orderProducer;
 
-    public OrderResponse createOrder(final OrderRequest request) {
-
-
-
-
+    public PaymentResponse createOrder(OrderRequest orderRequest) {
         // Gia su data truyen vao hop le
         OrderEntity orderEntity = OrderEntity.builder()
-                .totalPrice(request.getTotalPrice())
+                .totalPrice(orderRequest.getTotalPrice())
                 .status(OrderStatus.CREATED)
                 .build();
 
-        List<OrderItemEntity> items = request.getListItems().stream()
+        List<OrderItemEntity> items = orderRequest.getListItems().stream()
                 .map(item -> {
                     OrderItemEntity orderItem = OrderItemEntity.builder()
                             .productId(item.getProductId())
                             .quantity(item.getQuantity())
                             .price(item.getPrice())
-                            .order(orderEntity) // 👈 Quan trọng: set quan hệ cha
+                            .order(orderEntity)
                             .build();
                     return orderItem;
                 }).toList();
@@ -60,17 +61,17 @@ public class OrderService {
 
         orderProducer.sendOrderCreated(orderCreatedEvent);
 
+        PaymenRequest paymenRequest = PaymenRequest.builder()
+                .bookingId(orderEntity.getId())
+                .amount(orderEntity.getTotalPrice())
+                .build();
 
-        return OrderResponse.builder()
-                .id(orderEntity.getId())
-                .totalPrice(orderEntity.getTotalPrice())
-                .status(orderEntity.getStatus())
-                .listItems(orderEntity.getListItems().stream().map(item -> OrderItemEntity.builder()
-                        .id(item.getId())
-                        .productId(item.getProductId())
-                        .quantity(item.getQuantity())
-                        .price(item.getPrice())
-                        .build()).toList())
+
+        return PaymentResponse.builder()
+                .bookingId(orderEntity.getId())
+                .amount(orderEntity.getTotalPrice())
+                .status(orderEntity.getStatus().toString())
+                .url(paymentClient.createPaymentUrl(paymenRequest))
                 .build();
     }
 

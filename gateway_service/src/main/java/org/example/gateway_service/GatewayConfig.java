@@ -13,10 +13,11 @@ public class GatewayConfig {
         return builder.routes()
 
                 .route("product-service", r -> r.path("/products/**")
-                        .uri("http://localhost:8081/product-service"))
-
+                        .uri("lb://product-service"))
                 .route("order-service", r -> r.path("/orders/**")
-                        .uri("http://localhost:8082/order-service"))
+                        .uri("lb://order-service"))
+                .route("payment-service", r -> r.path("/payments/**")
+                        .uri("lb://payment-service"))
                 .build();
     }
 }

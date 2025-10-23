@@ -21,6 +21,7 @@
         <module>product_service</module>
         <module>gateway_service</module>
         <module>discovery_service</module>
+        <module>payment_service</module>
     </modules>
 
 

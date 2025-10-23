@@ -1,10 +1,12 @@
 package org.example.order_service.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.order_service.ProductClient;
 import org.example.order_service.entity.OrderEntity;
 import org.example.order_service.request.OrderRequest;
 import org.example.order_service.response.OrderResponse;
+import org.example.order_service.response.PaymentResponse;
 import org.example.order_service.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +18,12 @@ public class OrderController {
     private final ProductClient productClient;
 
     @PostMapping
-    public OrderResponse createOrder(@RequestBody final OrderRequest request) {
-        return orderService.createOrder(request);
+    public PaymentResponse createOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.createOrder(orderRequest);
     }
 
     @GetMapping("/{id}")
-    public OrderResponse getOrderById(@PathVariable final int id) {
+    public OrderResponse getOrderById(@PathVariable int id) {
         return orderService.getOrderById(id);
     }
 
