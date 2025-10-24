@@ -61,17 +61,17 @@ public class OrderService {
 
         orderProducer.sendOrderCreated(orderCreatedEvent);
 
-        PaymenRequest paymenRequest = PaymenRequest.builder()
-                .bookingId(orderEntity.getId())
-                .amount(orderEntity.getTotalPrice())
-                .build();
+//        PaymenRequest paymenRequest = PaymenRequest.builder()
+//                .bookingId(orderEntity.getId())
+//                .amount(orderEntity.getTotalPrice())
+//                .build();
 
 
         return PaymentResponse.builder()
                 .bookingId(orderEntity.getId())
                 .amount(orderEntity.getTotalPrice())
                 .status(orderEntity.getStatus().toString())
-                .url(paymentClient.createPaymentUrl(paymenRequest))
+//                .url(paymentClient.createPaymentUrl(paymenRequest))
                 .build();
     }
 

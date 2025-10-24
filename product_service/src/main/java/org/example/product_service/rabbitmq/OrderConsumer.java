@@ -29,7 +29,9 @@ public class OrderConsumer {
         }
         else {
             // Send event to order service to change status to FAILED
-            log.info("Order created failed due to insufficient product quantity");
+            productProducer.sendInventoryFailedEvent(InventoryFailed.builder()
+                    .orderId(event.getOrderId())
+                    .build());
         }
 
     }
