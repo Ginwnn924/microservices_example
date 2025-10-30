@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: discovery_service
+  cloud:
+    compatibility-verifier:
+      enabled: false
 eureka:
   client:
     register-with-eureka: false

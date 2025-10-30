@@ -19,7 +19,7 @@ public class PaymentService {
     private final VNPAYConfig vnPayConfig;
 
 
-    public String createPayment(PaymenRequest paymenRequest, HttpServletRequest request) {
+    public String createPayment(PaymenRequest paymenRequest) {
         long amount = (paymenRequest.getAmount()) * 100;
 
         String vnpayRef = vnPayConfig.getRandomNumber(8);
@@ -27,7 +27,7 @@ public class PaymentService {
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
 
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
-        vnpParamsMap.put("vnp_IpAddr", vnPayConfig.getIpAddress(request));
+        vnpParamsMap.put("vnp_IpAddr", paymenRequest.getIpAddress());
         //
         vnpParamsMap.put("vnp_OrderInfo", paymenRequest.getBookingId() + "");
         vnpParamsMap.put("vnp_TxnRef", vnpayRef);
@@ -50,7 +50,12 @@ public class PaymentService {
 
         // Check response code
         String status = request.getParameter("vnp_ResponseCode");
-        return "00".equals(status) ? true : false;
+        if ("00".equals(status)) {
+            // Success
+            return true;
+        }
+
+
     }
 
     private boolean isValidParams(HttpServletRequest request) {

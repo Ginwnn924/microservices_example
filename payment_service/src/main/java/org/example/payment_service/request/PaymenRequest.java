@@ -8,5 +8,6 @@ import lombok.Setter;
 public class PaymenRequest {
     private int bookingId;
     private long amount;
+    private String ipAddress;
 }
 

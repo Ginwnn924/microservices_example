@@ -2,8 +2,8 @@ package org.example.product_service.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.common.rabbitmq.event.OrderItemEvent;
 import org.example.product_service.entity.Product;
-import org.example.product_service.rabbitmq.OrderItem;
 import org.example.product_service.repository.ProductRepository;
 import org.example.product_service.response.ProductResponse;
 import org.springframework.stereotype.Service;
@@ -36,16 +36,16 @@ public class ProductService {
                 .build();
     }
 
-    public void rollbackProductQuantity(List<OrderItem> listItems) {
-        for (OrderItem item : listItems) {
+    public void rollbackProductQuantity(List<OrderItemEvent> listItems) {
+        for (OrderItemEvent item : listItems) {
             productRepository.increaseQuantity(item.getProductId(), item.getQuantity());
         }
     }
 
-    public boolean decreaseQuantity(List<OrderItem> listItems) {
-        List<OrderItem> listItemsDecrease = new ArrayList<>();
+    public boolean decreaseQuantity(List<OrderItemEvent> listItems) {
+        List<OrderItemEvent> listItemsDecrease = new ArrayList<>();
         boolean allSuccess = true;
-        for (OrderItem item : listItems) {
+        for (OrderItemEvent item : listItems) {
             int isSuccess = productRepository.decreaseQuantity(item.getProductId(), item.getQuantity());
             if (isSuccess == 0) {
                 allSuccess = false;

@@ -2,19 +2,17 @@ package org.example.order_service.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.common.rabbitmq.event.OrderCreatedEvent;
+import org.example.common.rabbitmq.event.OrderItemEvent;
 import org.example.order_service.PaymentClient;
 import org.example.order_service.ProductClient;
 import org.example.order_service.entity.OrderEntity;
 import org.example.order_service.entity.OrderItemEntity;
 import org.example.order_service.entity.OrderStatus;
 import org.example.order_service.rabbitmq.OrderProducer;
-import org.example.order_service.rabbitmq.event.OrderCreatedEvent;
-import org.example.order_service.rabbitmq.event.OrderItemEvent;
 import org.example.order_service.repository.OrderRepository;
 import org.example.order_service.request.OrderRequest;
-import org.example.order_service.request.PaymenRequest;
 import org.example.order_service.response.OrderResponse;
-import org.example.order_service.response.PaymentResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class OrderService {
     private final PaymentClient paymentClient;
     private final OrderProducer orderProducer;
 
-    public PaymentResponse createOrder(OrderRequest orderRequest) {
+    public OrderResponse createOrder(OrderRequest orderRequest, HttpServletRequest request) {
         // Gia su data truyen vao hop le
         OrderEntity orderEntity = OrderEntity.builder()
                 .totalPrice(orderRequest.getTotalPrice())
@@ -52,6 +50,7 @@ public class OrderService {
         OrderCreatedEvent orderCreatedEvent = OrderCreatedEvent.builder()
                 .orderId(orderEntity.getId())
                 .totalPrice(orderEntity.getTotalPrice())
+                .ipAddress(getIpAddress(request))
                 .listItems(orderEntity.getListItems().stream().map(item -> OrderItemEvent.builder()
                         .productId(item.getProductId())
                         .quantity(item.getQuantity())
@@ -61,17 +60,13 @@ public class OrderService {
 
         orderProducer.sendOrderCreated(orderCreatedEvent);
 
-//        PaymenRequest paymenRequest = PaymenRequest.builder()
-//                .bookingId(orderEntity.getId())
-//                .amount(orderEntity.getTotalPrice())
-//                .build();
 
 
-        return PaymentResponse.builder()
-                .bookingId(orderEntity.getId())
-                .amount(orderEntity.getTotalPrice())
-                .status(orderEntity.getStatus().toString())
-//                .url(paymentClient.createPaymentUrl(paymenRequest))
+
+        return OrderResponse.builder()
+                .id(orderEntity.getId())
+                .totalPrice(orderEntity.getTotalPrice())
+                .status(orderEntity.getStatus())
                 .build();
     }
 
@@ -87,6 +82,17 @@ public class OrderService {
                 .build();
     }
 
-
+    private String getIpAddress(HttpServletRequest request) {
+        String ipAdress = "";
+        try {
+            ipAdress = request.getHeader("X-FORWARDED-FOR");
+            if (ipAdress == null) {
+                ipAdress = request.getRemoteAddr();
+            }
+        } catch (Exception e) {
+            ipAdress = "Invalid IP:" + e.getMessage();
+        }
+        return ipAdress;
+    }
 
 }

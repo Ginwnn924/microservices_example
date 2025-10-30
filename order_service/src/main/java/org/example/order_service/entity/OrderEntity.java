@@ -20,6 +20,7 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @Column(name = "payment_url", columnDefinition = "TEXT")
     private String paymentUrl;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

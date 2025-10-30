@@ -17,10 +17,9 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/create-url")
-    public String createUrlPayment(HttpServletRequest request,
-                                   @RequestBody PaymenRequest paymenRequest) {
-
-        return paymentService.createPayment(paymenRequest, request);
+    public String createUrlPayment(@RequestBody PaymenRequest paymenRequest) {
+//        return paymentService.createPayment(paymenRequest, request);
+        return "";
     }
 
     @GetMapping("/callback")
