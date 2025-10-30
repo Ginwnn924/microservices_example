@@ -12,30 +12,42 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
+    // Publishser
+    public static final String PRODUCT_EXCHANGE = "product.exchange";
+
+
+    // Consumer
     public static final String ORDER_EXCHANGE = "order.exchange";
-    public static final String ORDER_FAILED_QUEUE = "order.failed.queue";
-    public static final String ORDER_FAILED_ROUTING_KEY = "order.failed";
+    public static final String ORDER_CREATED_QUEUE = "order.created.queue";
+    public static final String ORDER_CREATED_ROUTING_KEY = "order.created";
 
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
-
     @Bean
-    public DirectExchange orderExchange() {
-        return new DirectExchange(ORDER_EXCHANGE);
+    public DirectExchange productExchange() {
+        return new DirectExchange(PRODUCT_EXCHANGE);
+    }
+
+
+
+
+
+    // Order Created
+    @Bean
+    public Queue orderQueue() {
+        return new Queue(ORDER_CREATED_QUEUE, true); // durable = true
     }
 
     @Bean
-    public Queue orderfailedQueue() {
-        return new Queue(ORDER_FAILED_QUEUE, true); // durable = true
+    public Binding bindingOrderCreated() {
+        return BindingBuilder.bind(orderQueue())
+                .to(new DirectExchange(ORDER_EXCHANGE))
+                .with(ORDER_CREATED_ROUTING_KEY);
     }
 
-    @Bean
-    public Binding bindingOrderFailed() {
-        return BindingBuilder.bind(orderfailedQueue())
-                .to(orderExchange())
-                .with(ORDER_FAILED_ROUTING_KEY);
-    }
+
+
 }

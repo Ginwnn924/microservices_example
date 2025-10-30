@@ -10,7 +10,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductProducer {
     private final RabbitTemplate rabbitTemplate;
+
     public void sendInventoryFailedEvent(InventoryFailed message) {
         rabbitTemplate.convertAndSend(RabbitConfig.ORDER_EXCHANGE, RabbitConfig.ORDER_FAILED_ROUTING_KEY, message);
     }
+
+
+    public void sendReservedEvent() {
+        rabbitTemplate.convertAndSend(RabbitConfig.ORDER_EXCHANGE, "order.reserved", "Order reserved");
+    }
+
 }

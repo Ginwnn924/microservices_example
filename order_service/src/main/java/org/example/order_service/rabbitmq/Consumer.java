@@ -23,4 +23,9 @@ public class Consumer {
             log.warn("Order not found: {}", event.getOrderId());
         });
     }
+
+    @RabbitListener(queues = "order.reserved.queue")
+    public void handleOrderReserved() {
+            log.info("Received order reserved event");
+    }
 }

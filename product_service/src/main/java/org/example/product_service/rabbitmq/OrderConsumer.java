@@ -26,6 +26,7 @@ public class OrderConsumer {
         if (isSuccess) {
             // Send event to payment service
             log.info("Order created successfully");
+            productProducer.sendReservedEvent();
         }
         else {
             // Send event to order service to change status to FAILED
