@@ -2,8 +2,9 @@ package org.example.order_service.rabbitmq;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.common.rabbitmq.constant.OrderConstant;
+import org.example.common.rabbitmq.event.ReservedFailedEvent;
 import org.example.order_service.entity.OrderStatus;
-import org.example.order_service.rabbitmq.event.InventoryFailedEvent;
 import org.example.order_service.repository.OrderRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class Consumer {
     private final OrderRepository orderRepository;
-    @RabbitListener(queues = "order.failed.queue")
-    public void handleOrderFailed(InventoryFailedEvent event) {
+    @RabbitListener(queues = OrderConstant.ORDER_FAILED_QUEUE)
+    public void handleOrderFailed(ReservedFailedEvent event) {
         orderRepository.findById(event.getOrderId()).ifPresentOrElse(order -> {
             order.setStatus(OrderStatus.OUT_OF_STOCK);
             orderRepository.save(order);
@@ -24,7 +25,7 @@ public class Consumer {
         });
     }
 
-    @RabbitListener(queues = "order.reserved.queue")
+    @RabbitListener(queues = OrderConstant.ORDER_RESERVED_QUEUE)
     public void handleOrderReserved() {
             log.info("Received order reserved event");
     }
