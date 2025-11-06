@@ -3,6 +3,7 @@ server:
 spring:
   application:
     name: discovery_service
+  # tat chuc nang kiem tra tuong thich giua spring boot va spring cloud
   cloud:
     compatibility-verifier:
       enabled: false
